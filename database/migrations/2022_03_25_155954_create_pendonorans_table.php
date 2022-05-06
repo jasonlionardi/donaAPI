@@ -28,6 +28,7 @@ class CreatePendonoransTable extends Migration
             $table->integer('cc_diambil');
             $table->date('kembali_setelah');
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 

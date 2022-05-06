@@ -23,5 +23,5 @@ use App\Http\Controllers\UserController;
 
 Route::post('/login', [UserController::class, 'login']);
 
-Route::resource('user', UserController::class)->middleware('auth:api');
-Route::resource('pendonoran', PendonoranController::class)->middleware('auth:api');
+Route::resource('user', UserController::class)->middleware(['auth:api', 'role']);
+Route::resource('pendonoran', PendonoranController::class)->middleware(['auth:api', 'role']);

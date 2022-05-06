@@ -21,13 +21,13 @@ class CreateUsersTable extends Migration
             $table->string('phone');
             $table->string('email')->unique();
             $table->date('date_of_birth');
-            $table->string('nomor_kartu');
             $table->char('gender');
             $table->char('blood_type');
             $table->char('rhesus');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role')->default('donor');
+            // JANGAN PAKE DATA ROLE DI SINI, PAKE DATA DI TABLE ROLES
             $table->rememberToken();
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
