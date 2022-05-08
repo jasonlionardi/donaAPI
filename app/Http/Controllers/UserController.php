@@ -40,8 +40,20 @@ class UserController extends Controller
                 'status' => 'Login Failed'
             ]);
         }else{
+            $user = Auth::user();
+            $userRole = $user->role()->first();
+
+            if ($userRole) {
+                $this->scope = $userRole->role;
+            }
+
+//            dd('$user', $user, '$userRole', $userRole, '$userRole->role', $userRole->role, '$this', $this, '$this->scope', $this->scope);
+
+            $token = $user->createToken($user->username.'-'.now(), [$this->scope]);
+//            dd('$token', $token);
             return response()->json([
-                'token' => Auth::user()->createToken('testToken')->accessToken
+//                'token' => Auth::user()->createToken('testToken')->accessToken
+                'token' => $token->accessToken
             ]);
         }
 
@@ -83,9 +95,19 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+//        dd('$request', $request, '$request->user', $request->user(), '$request->user->id', $request->user()->id);
+        $id = (int)$id;
+        $reqUserId = $request->user()->id;
+//        dd('$reqUserId', $reqUserId, '$id', $id);
+        if($reqUserId !== $id) {
+            return abort(response()->json([
+                'message' => 'Unauthorized'
+            ], 403));
+        }
+
+        return User::where('id', $id)->get();
     }
 
     /**

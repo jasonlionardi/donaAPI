@@ -34,7 +34,7 @@ class AuthServiceProvider extends ServiceProvider
             'donor' => 'view and modify self info',
         ]);
 
-        Passport::setDefaultScope(['basic']);
+        Passport::setDefaultScope(['donor']);
 
     }
 }
