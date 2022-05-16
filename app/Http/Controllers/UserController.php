@@ -63,8 +63,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->scope !== 'admin') {
+            return abort(response()->json([
+                'message' => 'Unauthorized'
+            ], 403));
+        }
         return User::all();
     }
 
@@ -101,7 +106,8 @@ class UserController extends Controller
         $id = (int)$id;
         $reqUserId = $request->user()->id;
 //        dd('$reqUserId', $reqUserId, '$id', $id);
-        if($reqUserId !== $id) {
+//        dd('check user role', $request->user(), $request->user()->scopes, $request->scope);
+        if($reqUserId !== $id && $request->scope !== 'admin') {
             return abort(response()->json([
                 'message' => 'Unauthorized'
             ], 403));

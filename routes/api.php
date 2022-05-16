@@ -24,16 +24,19 @@ use App\Models\User;
 
 Route::post('/login', [UserController::class, 'login']);
 
-//Route::resource('user', UserController::class)->middleware(['auth:api', 'role']);
-//Route::resource('pendonoran', PendonoranController::class)->middleware(['auth:api', 'role']);
+// USER
+Route::resource('user', UserController::class)->middleware(['auth:api', 'role']);
 
-Route::middleware(['auth:api', 'role'])->group(function(){
-    // List users
-    Route::middleware(['scope:admin'])->get('/user', [UserController::class, 'index']);
-    Route::middleware(['scope:admin'])->post('/user', [UserController::class, 'store']);
-    Route::middleware(['scope:admin'])->get('/user/create', [UserController::class, 'create']);
-    Route::middleware(['scope:admin'])->delete('/user/{user}', [UserController::class, 'destroy']);
-    Route::middleware(['scope:admin'])->put('/user/{user}', [UserController::class, 'update']);
-    Route::middleware(['scope:admin,donor'])->get('/user/{user}', [UserController::class, 'show']);
-    Route::middleware(['scope:admin'])->get('/user/{user}/edit', [UserController::class, 'edit']);
-});
+//Route::middleware(['auth:api', 'role'])->group(function(){
+//    // List users
+//    Route::middleware(['scope:admin'])->get('/user', [UserController::class, 'index']);
+//    Route::middleware(['scope:admin'])->post('/user', [UserController::class, 'store']);
+//    Route::middleware(['scope:admin'])->get('/user/create', [UserController::class, 'create']);
+//    Route::middleware(['scope:admin'])->delete('/user/{user}', [UserController::class, 'destroy']);
+//    Route::middleware(['scope:admin'])->put('/user/{user}', [UserController::class, 'update']);
+//    Route::middleware(['scope:admin,donor'])->get('/user/{user}', [UserController::class, 'show']);
+//    Route::middleware(['scope:admin'])->get('/user/{user}/edit', [UserController::class, 'edit']);
+//});
+
+// PENDONORAN
+//Route::resource('pendonoran', PendonoranController::class)->middleware(['auth:api', 'role']);

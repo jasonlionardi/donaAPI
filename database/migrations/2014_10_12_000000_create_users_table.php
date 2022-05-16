@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->char('rhesus');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('role')->default('donor');
+//            $table->string('role')->default('donor');
             // JANGAN PAKE DATA ROLE DI SINI, PAKE DATA DI TABLE ROLES
             $table->rememberToken();
             $table->timestamps();
