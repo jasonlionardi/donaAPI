@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -12,10 +14,24 @@ class UserController extends Controller
     public function login(Request $request)
     {
         if(isset($request->email)){
-            request()->validate([
+
+            $validation = [
                 'email' => 'required',
                 'password' => 'required',
-            ]);
+            ];
+
+            $validator = Validator::make($request->all(), $validation);
+
+            if($validator->fails()) {
+                return response()->json([
+                    'message' => 'Email or Password input failure'
+                ]);
+            }
+
+//            request()->validate([
+//                'email' => 'required',
+//                'password' => 'required',
+//            ]);
 
             $credentials=[
                 'email' => $request->email,
@@ -23,10 +39,24 @@ class UserController extends Controller
             ];
         }
         else{
-            $request->validate([
+
+            $validation = [
                 'username' => 'required',
                 'password' => 'required',
-            ]);
+            ];
+
+            $validator = Validator::make($request->all(), $validation);
+
+            if($validator->fails()) {
+                return response()->json([
+                    'message' => 'Username or Password input failure'
+                ]);
+            }
+
+//            $request->validate([
+//                'username' => 'required',
+//                'password' => 'required',
+//            ]);
 
             $credentials=[
                 'username' => $request->username,
@@ -74,16 +104,6 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -91,7 +111,107 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        return User::create($request->all());
+//        FURTHER VALIDATION REQUIRED!!!
+        $validation = [
+            'no_regis_donor' => 'required',
+            'name' => 'required',
+            'username' => 'required',
+            'phone' => 'required',
+            'email' => 'required',
+            'date_of_birth' => 'required',
+            'gender' => 'required',
+            'blood_type' => 'required',
+            'rhesus' => 'required',
+            'email_verified_at' => 'required',
+            'password' => 'required',
+            'remember_token' => 'required',
+        ];
+
+        $validator = Validator::make($request->all(), $validation);
+
+        if($validator->fails()) {
+            return response()->json([
+                'message' => 'All parameters must be filled!'
+            ]);
+        }
+
+        if (User::where('email', '=', $request->email)->exists()) {
+            return response()->json([
+                'message' => 'Email is already in use!'
+            ]);
+        }
+        else if (User::where('username', '=', $request->username)->exists()) {
+            return response()->json([
+                'message' => 'Username is already in use!'
+            ]);
+        }
+
+//        $userData = [
+//            'no_regis_donor' => $request->no_regis_donor,
+//            'name' => $request->name,
+//            'username' => $request->username,
+//            'phone' => $request->phone,
+//            'email' => $request->email,
+//            'date_of_birth' => $request->date_of_birth,
+//            'gender' => $request->gender,
+//            'blood_type' => $request->blood_type,
+//            'rhesus' => $request->rhesus,
+//            'email_verified_at' => $request->email_verified_at,
+//            'password' => $request->password,
+//            'remember_token' => $request->remember_token,
+//        ];
+
+//        $userData = [
+//            'no_regis_donor' => '123456789wertyu',
+//            'name' => 'John Doe',
+//            'username' => 'jdoe',
+//            'phone' => '098765432',
+//            'email' => 't@t.com',
+//            'date_of_birth' => '2000-01-01',
+//            'gender' => 'M',
+//            'blood_type' => 'O',
+//            'rhesus' => '+',
+//            'email_verified_at' => now(),
+//            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+//            'remember_token' => Str::random(10),
+//        ];
+//        dd('store request', $request->all(), 'user data', $userData);
+//        return User::create($request->all());
+
+        $user = new User();
+
+//        $user->no_regis_donor = '123456789wertyu';
+//        $user->name = 'John Doe';
+//        $user->username = 'jdoe';
+//        $user->phone = '098765432';
+//        $user->email = 'tes@mail.com';
+//        $user->date_of_birth = '2000-01-01';
+//        $user->gender = 'M';
+//        $user->blood_type = 'O';
+//        $user->rhesus = '+';
+//        $user->email_verified_at = now();
+//        $user->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
+//        $user->remember_token = Str::random(10);
+
+        $user->no_regis_donor = $request->no_regis_donor;
+        $user->name = $request->name;
+        $user->username = $request->username;
+        $user->phone = $request->phone;
+        $user->email = $request->email;
+        $user->date_of_birth = $request->date_of_birth;
+        $user->gender = $request->gender;
+        $user->blood_type = $request->blood_type;
+        $user->rhesus = $request->rhesus;
+        $user->email_verified_at = $request->email_verified_at;
+        $user->password = $request->password;
+        $user->remember_token = $request->remember_token;
+
+        $user->save();
+//        dd('store request', $request->all(), 'user save', $user);
+
+        return response()->json([
+            'message' => 'New user created!'
+        ]);
     }
 
     /**
